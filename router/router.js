@@ -6,6 +6,11 @@
 */
 var express = require('express');
 var router = express.Router();
+
+var models = require('../db/articleModel.js');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://127.0.0.1:27017/blog_database');
+var Article = models.Article;
 // 路由使用中间件输出请求与响应的输出时间
 router.use(function (req, res, next) {
 	console.log('Time:', Date.now());
@@ -15,10 +20,10 @@ router.use(function (req, res, next) {
 // 获取所有健康生活文章列表
 router.route('/')
 	.get(function (req, res) {
-		res.send('get all article list');
+		var article = new Article();
 	})
 	.post(function (req, res) {
-		console.log(res)
+		console.log(res.client.baseUrl)
 	});
 // 根据年份获取该文章列表
 router.route('/:year')
