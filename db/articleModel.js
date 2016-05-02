@@ -5,6 +5,6 @@ var _ArticleSchema = mongoose.Schema( {
 	date: {type:Date, default: Date.now},
 	body: String,
 	type: String,
-	label: Array
+	labels: Array
 });
 exports.Article = mongoose.model('Article',_ArticleSchema)

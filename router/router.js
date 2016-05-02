@@ -19,19 +19,10 @@ router.use(function (req, res, next) {
 // 增加路由句柄
 router.route('/test')
 	.get(function (req, res) {
-		var article = new Article({
-			title: "颐和园",
-			author: "deng",
-			body: "颐和园，中国清朝时期皇家园林，前身为清漪园，坐落在北京西郊，距城区十五公里，占地约二百九十公顷，与圆明园毗...",
-			type: "life",
-			date : "2016-04-29T05:28:55.205Z", 
-			label: ["风景"]
-		});
-		article.save();
-		res.send('insert success');
+		
 	})
 	.post(function (req, res) {
-		console.log('123');
+		// console.log(req.body);
 	});
 // 获取所有文章列表
 router.route('/')
@@ -47,7 +38,9 @@ router.route('/')
 		})
 	})
 	.post(function (req, res) {
-		console.log(res.client.baseUrl)
+		var article = new Article(req.body);
+		article.save();
+		console.log('insert into'+ req.body.type);
 	});
 
 // 根据年份获取该文章列表
