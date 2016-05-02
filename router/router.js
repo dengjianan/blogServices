@@ -52,8 +52,6 @@ router.route('/:year/:month')
 		var type = req.baseUrl.substr(1);
 		var year = req.params.year;
 		var month = ("0" + req.params.month).substr(-2);
-		console.log(month);
-		console.log(req.params.month);
 		var gtDate = year + '-' + month + '-01T00:00:00.000Z';
 		var ltDate = year + '-' + month + '-31T23:59:59.000Z';
 		Article.find({type: type, date:{$gte: gtDate, $lt:ltDate}})
