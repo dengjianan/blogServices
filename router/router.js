@@ -22,7 +22,6 @@ router.route('/')
 		// 根据URL识别文章的所属类型，并返回该类型的所有文章
 		var type = req.baseUrl.substr(1);
 		Article.find({type:type})
-		// .select('title label')
 		.exec(function(err, doc) {
 			if(err) return handleError(err);
 			res.json(doc);
@@ -39,10 +38,9 @@ router.route('/:year')
 	.get(function (req, res){
 		var type = req.baseUrl.substr(1);
 		var year = req.params.year;
-		var gtDate = new Date(year,0,0);
-		var ltDate = new Date(year,12,31);
-		Article.find({type: type, year: year})
-		.where('date').gt(gtDate).lt(ltDate)
+		var gtDate = year + '-01-01T00:00:00.000Z';
+		var ltDate = year + '-12-31T23:59:59.000Z';
+		Article.find({type: type, date:{$gte: gtDate, $lt:ltDate}})
 		.exec(function(err, doc){
 			res.json(doc);
 		})
@@ -53,8 +51,12 @@ router.route('/:year/:month')
 	.get(function (req, res) {
 		var type = req.baseUrl.substr(1);
 		var year = req.params.year;
-		var month = req.params.month;
-		Article.find({type: type, year: year, month: month})
+		var month = ("0" + req.params.month).substr(-2);
+		console.log(month);
+		console.log(req.params.month);
+		var gtDate = year + '-' + month + '-01T00:00:00.000Z';
+		var ltDate = year + '-' + month + '-31T23:59:59.000Z';
+		Article.find({type: type, date:{$gte: gtDate, $lt:ltDate}})
 		.exec(function(err,doc){
 			res.json(doc);
 		})
@@ -64,6 +66,7 @@ router.route('/:year/:month')
 router.route('/:year/:month/:id')
 	.get(function (req, res) {
 		var id = req.params.id;
+		var type = req.baseUrl.substr(1);
 		Article.findOne({_id: id})
 		.exec(function(err, doc) {
 			// if(err) return handleError(err);

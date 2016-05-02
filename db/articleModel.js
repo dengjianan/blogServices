@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var _ArticleSchema = mongoose.Schema( {
-	title: String,
+	title: {type: String, required: true},
 	author: String,
 	date: {type:Date, default: Date.now},
 	body: String,
