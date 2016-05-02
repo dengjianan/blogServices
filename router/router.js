@@ -16,20 +16,11 @@ router.use(function (req, res, next) {
 	console.log('Time:', Date.now());
 	next();
 });
-// 增加路由句柄
-router.route('/test')
-	.get(function (req, res) {
-		
-	})
-	.post(function (req, res) {
-		// console.log(req.body);
-	});
 // 获取所有文章列表
 router.route('/')
 	.get(function (req, res) {
 		// 根据URL识别文章的所属类型，并返回该类型的所有文章
 		var type = req.baseUrl.substr(1);
-		var result
 		Article.find({type:type})
 		// .select('title label')
 		.exec(function(err, doc) {
@@ -60,16 +51,22 @@ router.route('/:year')
 // 根据月份获取该文章列表	
 router.route('/:year/:month')
 	.get(function (req, res) {
-		res.send('get article list by month')
+		var type = req.baseUrl.substr(1);
+		var year = req.params.year;
+		var month = req.params.month;
+		Article.find({type: type, year: year, month: month})
+		.exec(function(err,doc){
+			res.json(doc);
+		})
 	});
 
-// 根据文章列表获取该文章列表
+// 根据文章列表获取该文章具体内容
 router.route('/:year/:month/:id')
 	.get(function (req, res) {
 		var id = req.params.id;
-		Article.find({_id: id})
+		Article.findOne({_id: id})
 		.exec(function(err, doc) {
-			if(err) return handleError(err);
+			// if(err) return handleError(err);
 			res.json(doc);
 		});
 	});
