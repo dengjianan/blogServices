@@ -9,7 +9,7 @@ var router = express.Router();
 
 var models = require('../db/articleModel.js');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/blog_database');
+mongoose.connect('mongodb://139.129.20.6:27017/blog_database');
 var Article = models.Article;
 // 路由使用中间件输出请求与响应的输出时间
 router.use(function (req, res, next) {
@@ -21,16 +21,20 @@ router.route('/')
 	.get(function (req, res) {
 		// 根据URL识别文章的所属类型，并返回该类型的所有文章
 		var type = req.baseUrl.substr(1);
+		var items = {};
 		Article.find({type:type})
+		.sort('-date')
 		.exec(function(err, doc) {
 			if(err) return handleError(err);
-			res.json(doc);
+			items.items = doc;
+			res.json(items);
 		})
 	})
 	.post(function (req, res) {
 		var article = new Article(req.body);
 		article.save();
-		console.log('insert into'+ req.body.type);
+		// 提交成功后返回的数据
+		res.json({"success:":true})
 	});
 
 // 根据年份获取该文章列表
