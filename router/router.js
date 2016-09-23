@@ -9,7 +9,8 @@ var router = express.Router();
 
 var models = require('../db/articleModel.js');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://139.129.20.6:27017/blog_database');
+// mongoose.connect('mongodb://139.129.20.6:27017/blog_database');
+mongoose.connect('mongodb://127.0.0.1:27017/blog_database');
 var Article = models.Article;
 // 路由使用中间件输出请求与响应的输出时间
 router.use(function (req, res, next) {
